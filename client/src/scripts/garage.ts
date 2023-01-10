@@ -4,7 +4,7 @@ import carinfo from "./interfaces";
 
 const body = <HTMLElement>document.querySelector('body');
 
-function createGaragePage(data: carinfo): HTMLElement {
+function createGaragePage(data: carinfo[]): HTMLElement {
     body.appendChild(Pages())
     body.appendChild(Main(data))
     return body;

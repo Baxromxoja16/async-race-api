@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
         .then((data) => {
             return data.json()
         })
-        .then((data: carinfo) => {
+        .then((data: carinfo[]) => {
             garage(data)
         })
 })
