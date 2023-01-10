@@ -1,0 +1,42 @@
+@import './_mixins'
+
+body 
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif
+
+.btn
+    @include btn()
+.container
+    max-width: 1200px
+    margin: auto
+    margin-top: 30px
+.pages
+    display: flex
+    gap: 10px
+    margin-bottom: 30px
+.game
+    display: flex
+    gap: 10px
+    margin-top: 20px
+.road
+    width: 100%
+    border-bottom: 2px dashed black
+    display: flex
+    justify-content: space-between
+.form
+    .create,
+    .update
+        display: flex
+        align-items: center
+        gap: 10px
+        margin-bottom: 10px
+        .btn-create,
+        .btn-update
+            text-transform: uppercase
+.car-span
+    svg
+        stroke: red
+
+.main-cars
+    .btns-setting
+        display: flex
+        gap: 10px

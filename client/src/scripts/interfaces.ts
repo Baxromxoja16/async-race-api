@@ -1,3 +1,5 @@
 export default interface carinfo {
-    name: string
+    name: string,
+    color: string,
+    id: number
 }
