@@ -54,10 +54,6 @@ body {
   text-transform: uppercase;
 }
 
-.car-span svg {
-  stroke: red;
-}
-
 .main-cars .btns-setting {
   display: flex;
   gap: 10px;

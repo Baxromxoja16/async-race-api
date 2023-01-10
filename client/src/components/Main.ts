@@ -1,7 +1,6 @@
-function CreateMain() {
-    const main = document.createElement('div');
-    const title = document.createElement('h1');
-    const pageNum = document.createElement('p');
+import carinfo from "../scripts/interfaces";
+
+function createCars(data: carinfo) {
     const mainCars = document.createElement('div');
     const car = document.createElement('div');
     const btnsSetting = document.createElement('div');
@@ -12,9 +11,6 @@ function CreateMain() {
     const carSpan = document.createElement('span');
     const flag = document.createElement('span');
 
-    main.classList.add('main');
-    title.classList.add('title');
-    pageNum.classList.add('page-num');
     mainCars.classList.add('main-cars');
     btnsSetting.classList.add('btns-setting');
     select.classList.add('select');
@@ -25,13 +21,11 @@ function CreateMain() {
     carSpan.classList.add('car-span');
     flag.classList.add('flag');
 
-    title.innerText = 'Garage (6)';
-    pageNum.innerText = `Page #${4}`;
     select.innerText = 'Select';
     remove.innerText = 'Remove';
-    carName.innerText = `${'Tesla'}`;
+    carName.innerText = `${data.name}`;
     carSpan.innerHTML = `
-    <svg width="64px" height="64px" viewBox="0 0 400 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <svg width="64px" height="64px" viewBox="0 0 400 400" style='stroke: ${data.color} ' fill="none" xmlns="http://www.w3.org/2000/svg">
         <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
         <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
         <g id="SVGRepo_iconCarrier">
@@ -66,9 +60,25 @@ function CreateMain() {
     car.appendChild(btnsSetting);
     car.appendChild(road);
     mainCars.appendChild(car);
+
+    return mainCars;
+}
+
+function CreateMain(data: carinfo) {
+    const main = document.createElement('div');
+    const title = document.createElement('h1');
+    const pageNum = document.createElement('p');
+
+    main.classList.add('main');
+    title.classList.add('title');
+    pageNum.classList.add('page-num');
+
+    title.innerText = 'Garage (6)';
+    pageNum.innerText = `Page #${4}`;
+
     main.appendChild(title);
     main.appendChild(pageNum);
-    main.appendChild(mainCars);
+    data.map((el: carinfo) => main.appendChild(createCars(el)));
     return main;
 }
 

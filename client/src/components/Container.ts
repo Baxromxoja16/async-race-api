@@ -1,11 +1,11 @@
+import carinfo from '../scripts/interfaces';
 import Form from './Form'
 import Main from './Main'
-function createContainer() {
+function createContainer(data: carinfo) {
     const container = document.createElement('div') as HTMLElement;
-
     container.classList.add('container');
-    container.appendChild(Form())
-    container.appendChild(Main())
+    container.appendChild(Form.createFormComponent())
+    container.appendChild(Main(data))
     
     return container;
 }
