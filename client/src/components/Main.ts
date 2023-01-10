@@ -1,4 +1,5 @@
 import carinfo from "../scripts/interfaces";
+import Form from "./Form";
 
 const Main = {
     createCars(data: carinfo) {
@@ -13,7 +14,7 @@ const Main = {
         const flag = document.createElement('span');
 
         mainCars.classList.add('main-cars');
-        mainCars.setAttribute('data-id',`${data.id}`);
+        mainCars.setAttribute('data-id', `${data.id}`);
         btnsSetting.classList.add('btns-setting');
         select.classList.add('select');
         remove.classList.add('remove');
@@ -81,6 +82,7 @@ const Main = {
         // .setAttribute('data-id',`${data.id}`);
         data.map((el: carinfo) => main.appendChild(this.createCars(el)));
         this.removeCar(main)
+        this.selectCar(main)
         return main;
     },
     removeCar(mainCars: HTMLElement) {
@@ -94,9 +96,47 @@ const Main = {
                     .catch((error) => {
                         console.error('Error:', error);
                     });
+                location.reload();
             })
         })
-    }
+    },
+    selectCar(main: HTMLElement) {
+
+    },
+    getHtmlElements(text: HTMLInputElement, color: HTMLInputElement, btn: HTMLElement) {
+        fetch('http://localhost:3000/garage')
+            .then((data) => {
+                return data.json()
+            })
+            .then((data: carinfo[]) => {
+                const selects = document.querySelectorAll('.select');
+                selects.forEach((el) => {
+                    el.addEventListener('click', () => {
+                        const id = Number((el.parentNode?.parentNode?.parentNode as HTMLElement).dataset.id)
+
+                        const found = data.filter((x) => x.id === id)
+
+                        text.value = found[0].name
+                        color.value = found[0].color
+
+                        btn.addEventListener('click', async (e) => {
+                            await fetch(`http://localhost:3000/garage/${found[0].id}`,{
+                                method: 'PUT',
+                                headers: {'Content-Type': 'application/json'},
+                                body: JSON.stringify({
+                                    name: text.value,
+                                    color: color.value,
+                                })
+                            })
+                            .catch((error) => {
+                                console.error('Error:', error);
+                            });
+                            location.reload();
+                        })
+                    })
+                })
+            })
+    },
 }
 
 

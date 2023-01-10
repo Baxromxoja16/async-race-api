@@ -1,3 +1,5 @@
+import Main from "./Main";
+
 const Form = {
 
     createFormComponent() {
@@ -58,6 +60,7 @@ const Form = {
         form.appendChild(update);
         form.appendChild(game);
         this.createNewCar(form)
+        this.updateCar(form)
         return form;
     },
     createNewCar(form: HTMLElement) {
@@ -77,7 +80,17 @@ const Form = {
                 .catch((error) => {
                     console.error('Error:', error);
                 });
+            location.reload();
         })
+    },
+    updateCar(form?: HTMLElement) {
+        const updateBtn = ((form as HTMLElement).querySelector('.btn-update') as HTMLElement)
+        const upTexts = ((form as HTMLElement).querySelector('.up-texts') as HTMLInputElement)
+        const upColor = ((form as HTMLElement).querySelector('.up-color') as HTMLInputElement)
+        Main.getHtmlElements(upTexts, upColor, updateBtn)
+    },
+    getId(id: string | undefined) {
+        return id;
     }
 }
 
