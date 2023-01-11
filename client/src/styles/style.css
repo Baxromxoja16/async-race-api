@@ -1,5 +1,7 @@
 body {
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background: #222;
+  color: #fede00;
 }
 
 .btn {
@@ -35,9 +37,13 @@ body {
 
 .road {
   width: 100%;
-  border-bottom: 2px dashed black;
+  border-bottom: 3px dashed white;
   display: flex;
   justify-content: space-between;
+  margin-bottom: 10px;
+}
+.road .flag svg {
+  stroke: #fede00;
 }
 
 .form .create,

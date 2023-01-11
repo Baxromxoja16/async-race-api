@@ -2,6 +2,8 @@
 
 body 
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif
+    background: #222
+    color: #fede00
 
 .btn
     @include btn()
@@ -19,9 +21,13 @@ body
     margin-top: 20px
 .road
     width: 100%
-    border-bottom: 2px dashed black
+    border-bottom: 3px dashed white
     display: flex
     justify-content: space-between
+    margin-bottom: 10px
+    .flag
+        svg
+            stroke: #fede00
 .form
     .create,
     .update
@@ -38,3 +44,4 @@ body
     .btns-setting
         display: flex
         gap: 10px
+            

@@ -1,7 +1,6 @@
 import Main from "./Main";
 
 const Form = {
-
     createFormComponent() {
         const form = document.createElement('div');
         const create = document.createElement('div');
@@ -61,6 +60,7 @@ const Form = {
         form.appendChild(game);
         this.createNewCar(form)
         this.updateCar(form)
+        this.generateCars(form)
         return form;
     },
     createNewCar(form: HTMLElement) {
@@ -89,9 +89,47 @@ const Form = {
         const upColor = ((form as HTMLElement).querySelector('.up-color') as HTMLInputElement)
         Main.getHtmlElements(upTexts, upColor, updateBtn)
     },
-    getId(id: string | undefined) {
-        return id;
+    generateCars(form: HTMLElement) {
+        const generate = form.querySelector('.generate')
+
+        const names: string[] = ['Honda', 'BMW', 'Audi', 'Telsa', 'Chevrolet', 'Fort', 'Ferrari', 'Hyundai', 'Isuzu', 'Jaguar', 'Kia', 'Lexus', 'Lamborgini', 'Land Rover', 'Mazda', 'Mercedes-Benz', 'Moskvich', 'Mitsubishi', 'Nissan', 'Porsche', 'Rols Royce', 'Suzuki', 'Subaru', 'Toyota', 'Tank', 'Volvo', 'Volkswagen',];
+
+        const marks: string[] = ['1', '2', '3', '4', '5', '6', '7', '8', '9', 'i2', 'i4', 'i6', 'i7', 'X2', 'X3', 'X4', 'X5', 'X6', 'DBX', 'S', 'V', 'B', 'D', 'A', 'X', 'W3', 'R', 'T', 'DBX'];
+
+        const cars: object[] = [];
+        names.forEach(x => {
+            marks.forEach(y => {
+                let r: number = Math.floor(Math.random() * 255);
+                let g: number = Math.floor(Math.random() * 255);
+                let b: number = Math.floor(Math.random() * 255);
+                cars.push({ name: `${x} ${y}`, color: `rgb(${r}, ${g}, ${b})` })
+            })
+        })
+
+        for (let i = 0; i < 10; i++) {
+            cars.sort((x, y) => Math.random() - 0.5);
+        }
+
+        generate?.addEventListener('click', async () => {
+            cars.forEach(async (x, i) => {
+                if (i < 100) {
+                    await fetch('http://localhost:3000/garage', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(x)
+                    })
+                        .catch((error) => {
+                            console.error('Error:', error);
+                        });
+                }
+            })
+            setTimeout(() => {
+                location.reload();
+            }, 500);
+        })
+
+
+
     }
 }
-
 export default Form;
