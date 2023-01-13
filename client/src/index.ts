@@ -5,7 +5,6 @@ import garage from './scripts/garage'
 
 document.addEventListener('DOMContentLoaded', () => {
     Form.createFormComponent();
-
     fetch('http://localhost:3000/garage')
         .then((data) => {
             return data.json()
@@ -14,6 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
             garage(data)
         })
 })
+
 
 
 // function garage() {

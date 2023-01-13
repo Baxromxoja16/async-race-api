@@ -80,7 +80,8 @@ const Form = {
                 .catch((error) => {
                     console.error('Error:', error);
                 });
-            location.reload();
+            location.reload()
+
         })
     },
     updateCar(form?: HTMLElement) {
@@ -122,14 +123,9 @@ const Form = {
                             console.error('Error:', error);
                         });
                 }
+                location.reload()
             })
-            setTimeout(() => {
-                location.reload();
-            }, 500);
         })
-
-
-
     }
 }
 export default Form;

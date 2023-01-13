@@ -17,6 +17,10 @@ body {
   transform: scale(1.1);
 }
 
+button {
+  padding: 10px 15px;
+}
+
 .container {
   max-width: 1200px;
   margin: auto;
@@ -63,4 +67,8 @@ body {
 .main-cars .btns-setting {
   display: flex;
   gap: 10px;
+}
+
+.active {
+  background: green;
 }/*# sourceMappingURL=style.css.map */

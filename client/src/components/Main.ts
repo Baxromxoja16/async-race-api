@@ -65,24 +65,70 @@ const Main = {
         mainCars.appendChild(car);
         return mainCars;
     },
-    CreateMain(data: carinfo[]) {
+    CreateMain(data: carinfo[]): HTMLElement {
         const main = document.createElement('div');
         const title = document.createElement('h1');
         const pageNum = document.createElement('p');
+        const btnNext = document.createElement('button')
+        const btnPrev = document.createElement('button')
+        const mainParent = document.createElement('div');
+        let b: number = 0
 
         main.classList.add('main');
+        mainParent.classList.add('parent-main');
         title.classList.add('title');
         pageNum.classList.add('page-num');
+        btnNext.classList.add('active')
+        btnNext.innerText = 'Next'
+        btnPrev.innerText = 'Prev'
 
         title.innerText = `Garage (${data.length})`;
-        pageNum.innerText = `Page #${4}`;
+        pageNum.innerText = `Page #${b + 1}`;
 
         main.appendChild(title);
         main.appendChild(pageNum);
-        // .setAttribute('data-id',`${data.id}`);
-        data.map((el: carinfo) => main.appendChild(this.createCars(el)));
+        // pagination  started
+        let dataSort: carinfo[][] = [[]]
+        let a: number = 0
+        for (let i: number = 0; i < data.length; i++) {
+            if (dataSort[a].length < 10) {
+                dataSort[a].push(data[i])
+            } else if (dataSort[a].length === 10) {
+                dataSort.push([data[i]])
+                a++
+            }
+        }
+        main.appendChild(btnPrev);
+        main.appendChild(btnNext);
+        const asd = (b: number) => {
+            for (let j: number = 0; j < dataSort[b].length; j++) {
+                if (dataSort[b].length > j) {
+                    mainParent.appendChild(this.createCars(dataSort[b][j]))
+                }
+            }
+        }
+        asd(b)
+
+        btnNext.addEventListener('click', () => {
+            b < dataSort.length - 1 ? b++ : b = dataSort.length - 1
+            pageNum.innerText = `Page #${b + 1}`;
+            b !== dataSort.length - 1 ? btnNext.classList.add('active') : btnNext.classList.remove('active')
+            b !== 0 ? btnPrev.classList.add('active') : btnPrev.classList.remove('active')
+            mainParent.innerHTML = ''
+            asd(b)
+        })
+        btnPrev.addEventListener('click', () => {
+            b <= 0 ? b = 0 : b--
+            pageNum.innerText = `Page #${b + 1}`;
+            b !== dataSort.length - 1 ? btnNext.classList.add('active') : btnNext.classList.remove('active')
+            b !== 0 ? btnPrev.classList.add('active') : btnPrev.classList.remove('active')
+            mainParent.innerHTML = ''
+            asd(b)
+        })
+
+
+        main.appendChild(mainParent);
         this.removeCar(main)
-        this.selectCar(main)
         return main;
     },
     removeCar(mainCars: HTMLElement) {
@@ -96,12 +142,10 @@ const Main = {
                     .catch((error) => {
                         console.error('Error:', error);
                     });
-                location.reload();
+                location.reload()
+
             })
         })
-    },
-    selectCar(main: HTMLElement) {
-
     },
     getHtmlElements(text: HTMLInputElement, color: HTMLInputElement, btn: HTMLElement) {
         fetch('http://localhost:3000/garage')
@@ -120,24 +164,23 @@ const Main = {
                         color.value = found[0].color
 
                         btn.addEventListener('click', async (e) => {
-                            await fetch(`http://localhost:3000/garage/${found[0].id}`,{
+                            await fetch(`http://localhost:3000/garage/${found[0].id}`, {
                                 method: 'PUT',
-                                headers: {'Content-Type': 'application/json'},
+                                headers: { 'Content-Type': 'application/json' },
                                 body: JSON.stringify({
                                     name: text.value,
                                     color: color.value,
                                 })
                             })
-                            .catch((error) => {
-                                console.error('Error:', error);
-                            });
-                            location.reload();
+                                .catch((error) => {
+                                    console.error('Error:', error);
+                                });
+                            location.reload()
                         })
                     })
                 })
             })
     },
 }
-
 
 export default Main
