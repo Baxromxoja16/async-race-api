@@ -12,6 +12,8 @@ const Main = {
         const road = document.createElement('div');
         const carSpan = document.createElement('span');
         const flag = document.createElement('span');
+        const startEngine: HTMLElement = document.createElement('button')
+        const stopEngine: HTMLElement = document.createElement('button')
 
         mainCars.classList.add('main-cars');
         mainCars.setAttribute('data-id', `${data.id}`);
@@ -23,6 +25,14 @@ const Main = {
         road.classList.add('road');
         carSpan.classList.add('car-span');
         flag.classList.add('flag');
+
+        startEngine.classList.add('start-engine')
+        stopEngine.classList.add('stop-engine')
+        // stopEngine.classList.add('stop-active')
+        startEngine.classList.add('start-active')
+
+        startEngine.innerText = 'A'
+        stopEngine.innerText = 'B'
 
         select.innerText = 'Select';
         remove.innerText = 'Remove';
@@ -53,8 +63,9 @@ const Main = {
             </g>
         </svg>
         `
-
-
+        this.engine(data,data.id, startEngine, stopEngine, carSpan)
+        road.appendChild(startEngine)
+        road.appendChild(stopEngine)
         road.appendChild(carSpan);
         road.appendChild(flag);
         btnsSetting.appendChild(select);
@@ -66,27 +77,32 @@ const Main = {
         return mainCars;
     },
     CreateMain(data: carinfo[]): HTMLElement {
-        const main = document.createElement('div');
-        const title = document.createElement('h1');
-        const pageNum = document.createElement('p');
-        const btnNext = document.createElement('button')
-        const btnPrev = document.createElement('button')
-        const mainParent = document.createElement('div');
+        const main: HTMLElement = document.createElement('div');
+        const title: HTMLElement = document.createElement('h1');
+        const pageNum: HTMLElement = document.createElement('p');
+        const btnNext: HTMLElement = document.createElement('button')
+        const btnPrev: HTMLElement = document.createElement('button')
+
+        const mainParent: HTMLElement = document.createElement('div');
         let b: number = 0
 
         main.classList.add('main');
         mainParent.classList.add('parent-main');
         title.classList.add('title');
         pageNum.classList.add('page-num');
-        btnNext.classList.add('active')
+
+        data.length > 10 ? btnNext.classList.add('active') : btnNext
         btnNext.innerText = 'Next'
         btnPrev.innerText = 'Prev'
+
 
         title.innerText = `Garage (${data.length})`;
         pageNum.innerText = `Page #${b + 1}`;
 
         main.appendChild(title);
         main.appendChild(pageNum);
+
+
         // pagination  started
         let dataSort: carinfo[][] = [[]]
         let a: number = 0
@@ -181,6 +197,28 @@ const Main = {
                 })
             })
     },
+    engine(data: carinfo, id:number, startEngine: HTMLElement, stopEngine: HTMLElement, carSpan: HTMLElement) {
+        startEngine.addEventListener('click', () => {
+            startEngine.classList.remove('start-active')
+            stopEngine.classList.add('stop-active')
+            carSpan.classList.add('active-car')
+            this.engineFetch(data, id, 'started', carSpan)
+        })
+        stopEngine.addEventListener('click', () => {
+            stopEngine.classList.remove('stop-active')
+            startEngine.classList.add('start-active')
+            this.engineFetch(data, id, 'stopped', carSpan)
+        })
+    },
+    engineFetch(data: carinfo, id: number, query: string, carSpan:HTMLElement) {
+        fetch(`http://localhost:3000/engine?id=${id}&status=${query}`, {
+            method: 'PATCH'
+        })
+        .then(data => data.json())
+        .then(data => {
+            console.log((data.distance / data.velocity) / 3600);
+        })
+    }
 }
 
 export default Main

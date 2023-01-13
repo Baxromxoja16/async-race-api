@@ -42,12 +42,50 @@ button {
 .road {
   width: 100%;
   border-bottom: 3px dashed white;
-  display: flex;
-  justify-content: space-between;
   margin-bottom: 10px;
+  padding-bottom: 60px;
+  position: relative;
+}
+.road .flag {
+  position: absolute;
+  transform: translateX(1050px);
 }
 .road .flag svg {
   stroke: #fede00;
+}
+.road .car-span {
+  position: absolute;
+  transform: translateX(100px);
+  transition: 3s;
+}
+.road .active-car {
+  transform: translateX(1100px);
+}
+.road .start-engine,
+.road .stop-engine {
+  background: transparent;
+  border: 1px solid #aaa;
+  border-radius: 5px;
+  position: absolute;
+  color: white;
+  cursor: pointer;
+  font-size: 18px;
+}
+.road .start-engine {
+  left: 0;
+}
+.road .stop-engine {
+  left: 50px;
+}
+.road .start-active {
+  border-color: #00ff00;
+  background: rgba(15, 230, 15, 0.5);
+  color: #00ff00;
+}
+.road .stop-active {
+  border-color: #850000;
+  background: rgba(230, 15, 15, 0.5);
+  color: #ff9c9c;
 }
 
 .form .create,

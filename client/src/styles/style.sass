@@ -24,12 +24,46 @@ button
 .road
     width: 100%
     border-bottom: 3px dashed white
-    display: flex
-    justify-content: space-between
     margin-bottom: 10px
+    padding-bottom: 60px
+    position: relative
+
     .flag
+        position: absolute
+        transform: translateX(1050px)
         svg
             stroke: #fede00
+    .car-span
+        position: absolute
+        transform: translateX(100px)
+        transition: 3s
+    .active-car
+        transform: translateX(1100px)
+
+    .start-engine,
+    .stop-engine
+        background: transparent
+        border: 1px solid #aaa
+        border-radius: 5px
+        position: absolute
+        color: white
+        cursor: pointer
+        font-size: 18px
+
+    .start-engine
+        left: 0
+    .stop-engine
+        left: 50px
+    .start-active
+        border-color: #00ff00
+        background: rgba(15, 230, 15, 0.5)
+        color: #00ff00
+    .stop-active
+        border-color: #850000
+        background: rgba(230, 15, 15, 0.5)
+        color: #ff9c9c
+    
+
 .form
     .create,
     .update
