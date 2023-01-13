@@ -211,6 +211,7 @@ const Main = {
         stopEngine.addEventListener('click', () => {
             stopEngine.classList.remove('stop-active')
             startEngine.classList.add('start-active')
+            carSpan.classList.remove('active-car')
             this.engineFetch(data, id, 'stopped', carSpan)
         })
     },
