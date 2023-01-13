@@ -6,7 +6,6 @@ function createContainer(data: carinfo[]) {
     container.classList.add('container');
     container.appendChild(Form.createFormComponent())
     container.appendChild(Main.CreateMain(data))
-    // container.appendChild(Main.engine(data))
     
     return container;
 }

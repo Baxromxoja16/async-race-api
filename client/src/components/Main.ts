@@ -84,7 +84,7 @@ const Main = {
         const btnPrev: HTMLElement = document.createElement('button')
 
         const mainParent: HTMLElement = document.createElement('div');
-        let b: number = 0
+        let b: number = Number(localStorage.getItem('pageNum')) ? Number(localStorage.getItem('pageNum')) : 0
 
         main.classList.add('main');
         mainParent.classList.add('parent-main');
@@ -117,6 +117,8 @@ const Main = {
         main.appendChild(btnPrev);
         main.appendChild(btnNext);
         const asd = (b: number) => {
+            b !== dataSort.length - 1 ? btnNext.classList.add('active') : btnNext.classList.remove('active')
+            b !== 0 ? btnPrev.classList.add('active') : btnPrev.classList.remove('active')
             for (let j: number = 0; j < dataSort[b].length; j++) {
                 if (dataSort[b].length > j) {
                     mainParent.appendChild(this.createCars(dataSort[b][j]))
@@ -131,6 +133,7 @@ const Main = {
             b !== dataSort.length - 1 ? btnNext.classList.add('active') : btnNext.classList.remove('active')
             b !== 0 ? btnPrev.classList.add('active') : btnPrev.classList.remove('active')
             mainParent.innerHTML = ''
+            localStorage.setItem('pageNum', `${b}`)
             asd(b)
         })
         btnPrev.addEventListener('click', () => {
@@ -139,6 +142,7 @@ const Main = {
             b !== dataSort.length - 1 ? btnNext.classList.add('active') : btnNext.classList.remove('active')
             b !== 0 ? btnPrev.classList.add('active') : btnPrev.classList.remove('active')
             mainParent.innerHTML = ''
+            localStorage.setItem('pageNum', `${b}`)
             asd(b)
         })
 
