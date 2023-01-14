@@ -1,7 +1,6 @@
 import { getGarage, baseUrl, path, UpdateCar, DeleteCar } from "../scripts/fetchApi";
-import { carinfo } from "../scripts/interfaces";
+import { carinfo, paginationTypeObj } from "../scripts/interfaces";
 import { mainRender } from "../index";
-import Form from "./Form";
 
 const Main = {
     createCars(data: carinfo) {
@@ -93,10 +92,52 @@ const Main = {
         title.classList.add('title');
         pageNum.classList.add('page-num');
 
+        b > 1 ? btnNext.classList.add('active') : btnNext
+        b > 1 ? btnPrev.classList.add('active') : btnPrev
         data.length > 10 ? btnNext.classList.add('active') : btnNext
+        
         btnNext.innerText = 'Next'
         btnPrev.innerText = 'Prev'
 
+        // pagination  started
+        let dataSort: carinfo[][] = [[]]
+        let a: number = 0
+        for (let i: number = 0; i < data.length; i++) {
+            if (dataSort[a].length < 10) {
+                dataSort[a].push(data[i])
+            } else if (dataSort[a].length === 10) {
+                dataSort.push([data[i]])
+                a++
+            }
+        }
+        
+        const asd = (b: number) => {
+            for (let j: number = 0; j < dataSort[b].length; j++) {
+                if (dataSort[b].length > j) {
+                    mainParent.appendChild(this.createCars(dataSort[b][j]))
+                }
+            }
+        }
+        asd(b)
+
+        btnNext.addEventListener('click', () => {
+            b < dataSort.length - 1 ? b++ : b = dataSort.length - 1
+            pageNum.innerText = `Page #${b + 1}`;
+            b !== dataSort.length - 1 ? btnNext.classList.add('active') : btnNext.classList.remove('active')
+            b !== 0 ? btnPrev.classList.add('active') : btnPrev.classList.remove('active')
+            localStorage.setItem('pageNum', `${b}`)
+            mainParent.innerHTML = ''
+            asd(b)
+        })
+        btnPrev.addEventListener('click', () => {
+            b <= 0 ? b = 0 : b--
+            pageNum.innerText = `Page #${b + 1}`;
+            b !== dataSort.length - 1 ? btnNext.classList.add('active') : btnNext.classList.remove('active')
+            b !== 0 ? btnPrev.classList.add('active') : btnPrev.classList.remove('active')
+            localStorage.setItem('pageNum', `${b}`)
+            mainParent.innerHTML = ''
+            asd(b)
+        })
 
         title.innerText = `Garage (${data.length})`;
         pageNum.innerText = `Page #${b + 1}`;
@@ -106,7 +147,6 @@ const Main = {
 
         main.appendChild(btnPrev);
         main.appendChild(btnNext);
-        data.forEach((x) => mainParent.appendChild(this.createCars(x)))
         main.appendChild(mainParent);
         this.removeCar(main)
         return main;
@@ -165,7 +205,8 @@ const Main = {
         const response = await fetch(`http://localhost:3000/engine?id=${id}&status=${query}`, { method: 'PATCH' })
         const data = await response.json()
         console.log(data);
-    }
+    },
+
 }
 export default Main
 

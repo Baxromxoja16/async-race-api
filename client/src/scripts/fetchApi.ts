@@ -8,11 +8,11 @@ export const path = {
     winners: '/winners'
 };
 
-const generateQueryString = (queryParams: paginationTypeObj[]) => queryParams.length
+const generateQueryString = (queryParams: paginationTypeObj[] = []) => queryParams.length
     ? `?${queryParams.map((x) => `${x.key}=${x.number}`).join('&')}`
     : '';
 
-export const getGarage = async (baseUrl: string, path: string, queryParams: paginationTypeObj[] = []): Promise<carinfo[]> => {
+export const getGarage = async (baseUrl: string, path: string, queryParams?: paginationTypeObj[]): Promise<carinfo[]> => {
     const response = await fetch(`${baseUrl}${path}${generateQueryString(queryParams)}`);
     const data: carinfo[] = await response.json();
     // console.log(queryParams[0].number);
