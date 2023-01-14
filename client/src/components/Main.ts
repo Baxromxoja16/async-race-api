@@ -1,4 +1,6 @@
-import carinfo from "../scripts/interfaces";
+import { getGarage, baseUrl, path, UpdateCar, DeleteCar } from "../scripts/fetchApi";
+import { carinfo } from "../scripts/interfaces";
+import { mainRender } from "../index";
 import Form from "./Form";
 
 const Main = {
@@ -63,7 +65,7 @@ const Main = {
             </g>
         </svg>
         `
-        this.engine(data,data.id, startEngine, stopEngine, carSpan)
+        // this.engine(data, data.id, startEngine, stopEngine, carSpan)
         road.appendChild(startEngine)
         road.appendChild(stopEngine)
         road.appendChild(carSpan);
@@ -76,7 +78,7 @@ const Main = {
         mainCars.appendChild(car);
         return mainCars;
     },
-    CreateMain(data: carinfo[]): HTMLElement {
+    CreateMain(data: Array<carinfo>): HTMLElement {
         const main: HTMLElement = document.createElement('div');
         const title: HTMLElement = document.createElement('h1');
         const pageNum: HTMLElement = document.createElement('p');
@@ -102,51 +104,9 @@ const Main = {
         main.appendChild(title);
         main.appendChild(pageNum);
 
-
-        // pagination  started
-        let dataSort: carinfo[][] = [[]]
-        let a: number = 0
-        for (let i: number = 0; i < data.length; i++) {
-            if (dataSort[a].length < 10) {
-                dataSort[a].push(data[i])
-            } else if (dataSort[a].length === 10) {
-                dataSort.push([data[i]])
-                a++
-            }
-        }
         main.appendChild(btnPrev);
         main.appendChild(btnNext);
-        const asd = (b: number) => {
-            b !== dataSort.length - 1 ? btnNext.classList.add('active') : btnNext.classList.remove('active')
-            b !== 0 ? btnPrev.classList.add('active') : btnPrev.classList.remove('active')
-            for (let j: number = 0; j < dataSort[b].length; j++) {
-                if (dataSort[b].length > j) {
-                    mainParent.appendChild(this.createCars(dataSort[b][j]))
-                }
-            }
-        }
-        asd(b)
-
-        btnNext.addEventListener('click', () => {
-            b < dataSort.length - 1 ? b++ : b = dataSort.length - 1
-            pageNum.innerText = `Page #${b + 1}`;
-            b !== dataSort.length - 1 ? btnNext.classList.add('active') : btnNext.classList.remove('active')
-            b !== 0 ? btnPrev.classList.add('active') : btnPrev.classList.remove('active')
-            mainParent.innerHTML = ''
-            localStorage.setItem('pageNum', `${b}`)
-            asd(b)
-        })
-        btnPrev.addEventListener('click', () => {
-            b <= 0 ? b = 0 : b--
-            pageNum.innerText = `Page #${b + 1}`;
-            b !== dataSort.length - 1 ? btnNext.classList.add('active') : btnNext.classList.remove('active')
-            b !== 0 ? btnPrev.classList.add('active') : btnPrev.classList.remove('active')
-            mainParent.innerHTML = ''
-            localStorage.setItem('pageNum', `${b}`)
-            asd(b)
-        })
-
-
+        data.forEach((x) => mainParent.appendChild(this.createCars(x)))
         main.appendChild(mainParent);
         this.removeCar(main)
         return main;
@@ -156,74 +116,99 @@ const Main = {
         const cars = (mainCars.querySelectorAll('.remove') as NodeListOf<Element>)
         cars.forEach((el, i) => {
             el.addEventListener('click', async (e) => {
-                await fetch(`http://localhost:3000/garage/${(mainCar[i] as HTMLElement).dataset.id}`, {
-                    method: 'DELETE',
-                })
-                    .catch((error) => {
-                        console.error('Error:', error);
-                    });
-                location.reload()
-
+                const id: number = Number((mainCar[i] as HTMLElement).dataset.id)
+                const deleteCar = await DeleteCar(id)
+                mainRender()
             })
         })
     },
-    getHtmlElements(text: HTMLInputElement, color: HTMLInputElement, btn: HTMLElement) {
-        fetch('http://localhost:3000/garage')
-            .then((data) => {
-                return data.json()
-            })
-            .then((data: carinfo[]) => {
-                const selects = document.querySelectorAll('.select');
-                selects.forEach((el) => {
-                    el.addEventListener('click', () => {
-                        const id = Number((el.parentNode?.parentNode?.parentNode as HTMLElement).dataset.id)
+    async getHtmlElements(text: HTMLInputElement, color: HTMLInputElement, btn: HTMLElement) {
+        const data: carinfo[] = await getGarage(baseUrl, path.garage)
 
-                        const found = data.filter((x) => x.id === id)
+        const selects = document.querySelectorAll('.select');
+        selects.forEach((el) => {
+            el.addEventListener('click', () => {
+                const id = Number((el.parentNode?.parentNode?.parentNode as HTMLElement).dataset.id)
 
-                        text.value = found[0].name
-                        color.value = found[0].color
+                const found = data.filter((x: carinfo) => x.id === id)
 
-                        btn.addEventListener('click', async (e) => {
-                            await fetch(`http://localhost:3000/garage/${found[0].id}`, {
-                                method: 'PUT',
-                                headers: { 'Content-Type': 'application/json' },
-                                body: JSON.stringify({
-                                    name: text.value,
-                                    color: color.value,
-                                })
-                            })
-                                .catch((error) => {
-                                    console.error('Error:', error);
-                                });
-                            location.reload()
-                        })
-                    })
+                text.value = found[0].name
+                color.value = found[0].color
+
+                btn.addEventListener('click', async (e) => {
+                    const body = {
+                        name: text.value,
+                        color: color.value,
+                    };
+                    const postGarage = await UpdateCar(found[0].id, body);
+                    mainRender()
+                    return postGarage;
                 })
             })
+        })
     },
-    engine(data: carinfo, id:number, startEngine: HTMLElement, stopEngine: HTMLElement, carSpan: HTMLElement) {
+    engine(data: carinfo, id: number, startEngine: HTMLElement, stopEngine: HTMLElement, carSpan: HTMLElement) {
         startEngine.addEventListener('click', () => {
             startEngine.classList.remove('start-active')
             stopEngine.classList.add('stop-active')
             carSpan.classList.add('active-car')
-            this.engineFetch(data, id, 'started', carSpan)
+            this.engineFetch(id, 'started', carSpan)
         })
         stopEngine.addEventListener('click', () => {
             stopEngine.classList.remove('stop-active')
             startEngine.classList.add('start-active')
             carSpan.classList.remove('active-car')
-            this.engineFetch(data, id, 'stopped', carSpan)
+            this.engineFetch(id, 'stopped', carSpan)
         })
     },
-    engineFetch(data: carinfo, id: number, query: string, carSpan:HTMLElement) {
-        fetch(`http://localhost:3000/engine?id=${id}&status=${query}`, {
-            method: 'PATCH'
-        })
-        .then(data => data.json())
-        .then(data => {
-            console.log((data.distance / data.velocity) / 3600);
-        })
+    async engineFetch(id: number, query: string, carSpan: HTMLElement) {
+        const response = await fetch(`http://localhost:3000/engine?id=${id}&status=${query}`, { method: 'PATCH' })
+        const data = await response.json()
+        console.log(data);
     }
 }
-
 export default Main
+
+
+//  // pagination  started
+//  let dataSort: carinfo[][] = [[]]
+//  let a: number = 0
+//  for (let i: number = 0; i < data.length; i++) {
+//      if (dataSort[a].length < 10) {
+//          dataSort[a].push(data[i])
+//      } else if (dataSort[a].length === 10) {
+//          dataSort.push([data[i]])
+//          a++
+//      }
+//  }
+//  main.appendChild(btnPrev);
+//  main.appendChild(btnNext);
+//  const asd = (b: number) => {
+//      b !== dataSort.length - 1 ? btnNext.classList.add('active') : btnNext.classList.remove('active')
+//      b !== 0 ? btnPrev.classList.add('active') : btnPrev.classList.remove('active')
+//      for (let j: number = 0; j < dataSort[b].length; j++) {
+//          if (dataSort[b].length > j) {
+//              mainParent.appendChild(this.createCars(dataSort[b][j]))
+//          }
+//      }
+//  }
+//  asd(b)
+
+//  btnNext.addEventListener('click', () => {
+//      b < dataSort.length - 1 ? b++ : b = dataSort.length - 1
+//      pageNum.innerText = `Page #${b + 1}`;
+//      b !== dataSort.length - 1 ? btnNext.classList.add('active') : btnNext.classList.remove('active')
+//      b !== 0 ? btnPrev.classList.add('active') : btnPrev.classList.remove('active')
+//      mainParent.innerHTML = ''
+//      localStorage.setItem('pageNum', `${b}`)
+//      asd(b)
+//  })
+//  btnPrev.addEventListener('click', () => {
+//      b <= 0 ? b = 0 : b--
+//      pageNum.innerText = `Page #${b + 1}`;
+//      b !== dataSort.length - 1 ? btnNext.classList.add('active') : btnNext.classList.remove('active')
+//      b !== 0 ? btnPrev.classList.add('active') : btnPrev.classList.remove('active')
+//      mainParent.innerHTML = ''
+//      localStorage.setItem('pageNum', `${b}`)
+//      asd(b)
+//  })

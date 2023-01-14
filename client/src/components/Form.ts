@@ -1,3 +1,6 @@
+import { mainRender } from "..";
+import { CreateCars } from "../scripts/fetchApi";
+import { CreateCarinfo } from "../scripts/interfaces";
 import Main from "./Main";
 
 const Form = {
@@ -69,19 +72,12 @@ const Form = {
         const crColor = (form.querySelector('.cr-color') as HTMLInputElement)
 
         createBtn.addEventListener('click', async (e) => {
-            await fetch('http://localhost:3000/garage', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    name: crTexts.value,
-                    color: crColor.value,
-                })
-            })
-                .catch((error) => {
-                    console.error('Error:', error);
-                });
-            location.reload()
-
+            const body = {
+                name: crTexts.value,
+                color: crColor.value,
+            }
+            const data = await CreateCars(body)
+            mainRender()
         })
     },
     updateCar(form?: HTMLElement) {
@@ -92,18 +88,16 @@ const Form = {
     },
     generateCars(form: HTMLElement) {
         const generate = form.querySelector('.generate')
-
         const names: string[] = ['Honda', 'BMW', 'Audi', 'Telsa', 'Chevrolet', 'Fort', 'Ferrari', 'Hyundai', 'Isuzu', 'Jaguar', 'Kia', 'Lexus', 'Lamborgini', 'Land Rover', 'Mazda', 'Mercedes-Benz', 'Moskvich', 'Mitsubishi', 'Nissan', 'Porsche', 'Rols Royce', 'Suzuki', 'Subaru', 'Toyota', 'Tank', 'Volvo', 'Volkswagen',];
-
         const marks: string[] = ['1', '2', '3', '4', '5', '6', '7', '8', '9', 'i2', 'i4', 'i6', 'i7', 'X2', 'X3', 'X4', 'X5', 'X6', 'DBX', 'S', 'V', 'B', 'D', 'A', 'X', 'W3', 'R', 'T', 'DBX'];
 
         const cars: object[] = [];
         names.forEach(x => {
-            marks.forEach(y => {
+            marks.forEach((y, i) => {
                 let r: number = Math.floor(Math.random() * 255);
                 let g: number = Math.floor(Math.random() * 255);
                 let b: number = Math.floor(Math.random() * 255);
-                cars.push({ name: `${x} ${y}`, color: `rgb(${r}, ${g}, ${b})` })
+                i <= 100 ? cars.push({ name: `${x} ${y}`, color: `rgb(${r}, ${g}, ${b})` }) : cars
             })
         })
 
@@ -112,19 +106,13 @@ const Form = {
         }
 
         generate?.addEventListener('click', async () => {
-            cars.forEach(async (x, i) => {
+            cars.forEach(async (x: object, i) => {
                 if (i < 100) {
-                    await fetch('http://localhost:3000/garage', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(x)
-                    })
-                        .catch((error) => {
-                            console.error('Error:', error);
-                        });
-                }
-                location.reload()
+                    const cars = await CreateCars(x)
+                    Main.CreateMain(cars)
+                } // 9860 6004 3899 4128
             })
+            mainRender()
         })
     }
 }

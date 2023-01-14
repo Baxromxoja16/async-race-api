@@ -1,5 +1,13 @@
-export default interface carinfo {
+export interface carinfo {
     name: string,
     color: string,
-    id: number
+    id: number,
+}
+export interface CreateCarinfo {
+    name: string,
+    color: string,
+}
+export interface paginationTypeObj {
+    key: string,
+    number: number,
 }
