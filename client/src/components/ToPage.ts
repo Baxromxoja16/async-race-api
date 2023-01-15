@@ -1,3 +1,5 @@
+import { mainRender, WinnersRender } from "..";
+
 function Pages() {
     const pages = document.createElement('div');
     const toGarage = document.createElement('button');
@@ -12,6 +14,15 @@ function Pages() {
 
     pages.appendChild(toGarage);
     pages.appendChild(toWinners);
+
+    toGarage.addEventListener('click', () => {
+        mainRender()
+    })
+
+    toWinners.addEventListener('click', () => {
+        WinnersRender()
+    })
+
     return pages;
 }
 export default Pages;
