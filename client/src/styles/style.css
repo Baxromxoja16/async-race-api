@@ -22,7 +22,7 @@ button {
 }
 
 .container {
-  max-width: 1200px;
+  max-width: 80%;
   margin: auto;
   margin-top: 30px;
 }
@@ -48,17 +48,17 @@ button {
 }
 .road .flag {
   position: absolute;
-  transform: translateX(1050px);
+  right: 50px;
 }
 .road .flag svg {
   stroke: #fede00;
 }
 .road .car-span {
   position: absolute;
-  transform: translateX(100px);
+  left: 100px;
 }
 .road .active-car {
-  transform: translateX(1100px);
+  left: 95%;
 }
 .road .start-engine,
 .road .stop-engine {

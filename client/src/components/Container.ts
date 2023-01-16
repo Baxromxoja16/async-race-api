@@ -1,13 +1,13 @@
-import {carinfo} from '../scripts/interfaces';
-import Form from './Form'
-import Main from './Main'
+import { carinfo } from "../scripts/interfaces";
+import Form from "./Form";
+import Main from "./Main";
 function createContainer(data: Array<carinfo>) {
-    const container = document.createElement('div') as HTMLElement;
-    container.classList.add('container');
-    container.appendChild(Form.createFormComponent())
-    container.appendChild(Main.CreateMain(data))
-    
-    return container;
+  const container = document.createElement("div") as HTMLElement;
+  container.classList.add("container");
+  container.appendChild(Form.createFormComponent());
+  container.appendChild(Main.CreateMain(data));
+
+  return container;
 }
 
 export default createContainer;

@@ -1,63 +1,70 @@
 import { baseUrl, getGarage, path } from "../scripts/fetchApi";
 import { carinfo } from "../scripts/interfaces";
 
-
 const WinnerComponents = {
-    winnerMain(data: Array<carinfo>) {
-        const main: HTMLElement = document.createElement('div');
-        const title: HTMLElement = document.createElement('h1');
-        const pageNum: HTMLElement = document.createElement('p');
-        const btnNext: HTMLElement = document.createElement('button')
-        const btnPrev: HTMLElement = document.createElement('button')
-        const mainParent: HTMLElement = document.createElement('div');
-        const table: HTMLElement = document.createElement('table');
-        const tr: HTMLElement = document.createElement('tr');
-        let b: number = Number(localStorage.getItem('pageNumWin')) ? Number(localStorage.getItem('pageNumWin')) : 0
+  winnerMain(data: Array<carinfo>) {
+    const main: HTMLElement = document.createElement("div");
+    const title: HTMLElement = document.createElement("h1");
+    const pageNum: HTMLElement = document.createElement("p");
+    const btnNext: HTMLElement = document.createElement("button");
+    const btnPrev: HTMLElement = document.createElement("button");
+    const mainParent: HTMLElement = document.createElement("div");
+    const table: HTMLElement = document.createElement("table");
+    const tr: HTMLElement = document.createElement("tr");
+    const b: number = Number(localStorage.getItem("pageNumWin"))
+      ? Number(localStorage.getItem("pageNumWin"))
+      : 0;
 
-        main.classList.add('main');
-        mainParent.classList.add('parent-main');
-        title.classList.add('title');
-        pageNum.classList.add('page-num');
-        table.classList.add('winners-info')
-        
-        title.innerText = `Winners (${data.length})`;
-        pageNum.innerText = `Page #${b + 1}`;
-        btnNext.innerText = 'Next'
-        btnPrev.innerText = 'Prev'
-        const infoArr: string[] = ['Number', 'Car', 'Name', 'Wins', 'Best Time (seconds)'];
+    main.classList.add("main");
+    mainParent.classList.add("parent-main");
+    title.classList.add("title");
+    pageNum.classList.add("page-num");
+    table.classList.add("winners-info");
 
-        for (let i = 0; i < infoArr.length; i++) {
-            const th: HTMLElement = document.createElement('th');
-            th.innerText = infoArr[i]
-            tr.appendChild(th)
-        }
-        console.log(data.forEach((x, i)=> this.createWinnerList(x, i)));
+    title.innerText = `Winners (${data.length})`;
+    pageNum.innerText = `Page #${b + 1}`;
+    btnNext.innerText = "Next";
+    btnPrev.innerText = "Prev";
+    const infoArr: string[] = [
+      "Number",
+      "Car",
+      "Name",
+      "Wins",
+      "Best Time (seconds)",
+    ];
 
-        table.appendChild(tr)
-        // table.appendChild()
-        main.appendChild(title);
-        main.appendChild(pageNum);
-        
-        main.appendChild(btnPrev);
-        main.appendChild(btnNext);
-        main.appendChild(mainParent);
-        main.appendChild(table);
+    for (let i = 0; i < infoArr.length; i++) {
+      const th: HTMLElement = document.createElement("th");
+      th.innerText = infoArr[i];
+      tr.appendChild(th);
+    }
+    console.log(data.forEach((x, i) => this.createWinnerList(x, i)));
 
-        return main;
-    },
-    async createWinnerList(data: carinfo, i: number) {
-        const tr: HTMLElement = document.createElement('tr');
+    table.appendChild(tr);
+    // table.appendChild()
+    main.appendChild(title);
+    main.appendChild(pageNum);
 
-        const cars = await getGarage(baseUrl, path.garage);
-        
-        const found = cars.filter((val) => val.id === data.id)
-        
-        const propertyy = {...data, ...found[0]};
-        for (const key in propertyy){
-            console.log(key);
-            const td: HTMLElement = document.createElement('td');
-            if(key === 'color'){
-                td.innerHTML = `
+    main.appendChild(btnPrev);
+    main.appendChild(btnNext);
+    main.appendChild(mainParent);
+    main.appendChild(table);
+
+    return main;
+  },
+  async createWinnerList(data: carinfo, i: number) {
+    const tr: HTMLElement = document.createElement("tr");
+
+    const cars = await getGarage(baseUrl, path.garage);
+
+    const found = cars.filter((val) => val.id === data.id);
+
+    const propertyy = { ...data, ...found[0] };
+    for (const key in propertyy) {
+      console.log(key);
+      const td: HTMLElement = document.createElement("td");
+      if (key === "color") {
+        td.innerHTML = `
                         <svg width="64px" height="64px" viewBox="0 0 400 400" style='stroke: ${propertyy[key]} ' fill="none" xmlns="http://www.w3.org/2000/svg">
                         <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
                         <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
@@ -72,22 +79,20 @@ const WinnerComponents = {
                             <path d="M352.003 219.244C351.792 226.929 352.003 234.736 352.003 242.178" stroke-opacity="0.9" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"></path>
                         </g>
                         </svg>
-                    `
-                tr.appendChild(td)
-            } 
-            else if(key === 'name'){
-                td.innerText = propertyy[key]
-                tr.appendChild(td)
-            }
-            // else if(key === 'wins'){
-            //     td.innerText = `${propertyy[key]}`
-            //     tr.appendChild(td)
-            // }
-            // else if(key === 'color'){}
-        }
-        console.log(tr);
-        return tr;
-    },
-
-}
+                    `;
+        tr.appendChild(td);
+      } else if (key === "name") {
+        td.innerText = propertyy[key];
+        tr.appendChild(td);
+      }
+      // else if(key === 'wins'){
+      //     td.innerText = `${propertyy[key]}`
+      //     tr.appendChild(td)
+      // }
+      // else if(key === 'color'){}
+    }
+    console.log(tr);
+    return tr;
+  },
+};
 export default WinnerComponents;

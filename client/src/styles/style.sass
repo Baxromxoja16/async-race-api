@@ -1,6 +1,6 @@
 @import './_mixins'
 
-body 
+body
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif
     background: #222
     color: #fede00
@@ -10,9 +10,10 @@ body
 button
     padding: 10px 15px
 .container
-    max-width: 1200px
+    max-width: 80%
     margin: auto
     margin-top: 30px
+
 .pages
     display: flex
     gap: 10px
@@ -30,14 +31,16 @@ button
 
     .flag
         position: absolute
-        transform: translateX(1050px)
+        right: 50px
         svg
             stroke: #fede00
     .car-span
         position: absolute
-        transform: translateX(100px)
+        // transform: translateX(100px)
+        left: 100px
     .active-car
-        transform: translateX(1100px)
+        left: 95%
+        // transform: translateX(1100px)
 
     .start-engine,
     .stop-engine
@@ -61,7 +64,6 @@ button
         border-color: #850000
         background: rgba(230, 15, 15, 0.5)
         color: #ff9c9c
-    
 
 .form
     .create,
@@ -73,7 +75,6 @@ button
         .btn-create,
         .btn-update
             text-transform: uppercase
-
 
 .main-cars
     .btns-setting
