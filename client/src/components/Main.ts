@@ -203,5 +203,8 @@ const Main = {
     },
 
 }
+setTimeout(() => {
+    Engine.startEngine()
+}, 1000);
 
 export default Main;

@@ -19,7 +19,9 @@ export const getGarage = async (baseUrl: string, path: string, queryParams?: pag
     return data;
 };
 export const engineStart = async (baseUrl: string, path: string, idx: number, query: string ): Promise<carinfo[]> => {
-    const response = await fetch(`${baseUrl}${path}?id=${1}&status=${'started'}`);
+    const response = await fetch(`${baseUrl}${path}?id=${idx}&status=${query}`,{
+        method: 'PATCH'
+    });
     const data: carinfo[] = await response.json();
     return data;
 };
