@@ -18,11 +18,11 @@ export const getGarage = async (baseUrl: string, path: string, queryParams?: pag
     // console.log(queryParams[0].number);
     return data;
 };
-export const engineStart = async (baseUrl: string, path: string, idx: number, query: string ): Promise<carinfo[]> => {
+export const engineStart = async (baseUrl: string, path: string, idx: number, query: string ) => {
     const response = await fetch(`${baseUrl}${path}?id=${idx}&status=${query}`,{
         method: 'PATCH'
     });
-    const data: carinfo[] = await response.json();
+    const data = await response.json();
     return data;
 };
 // http://localhost:3000/engine?id=1&status=started

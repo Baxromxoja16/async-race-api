@@ -1,6 +1,7 @@
 import { mainRender } from "..";
 import { CreateCars } from "../scripts/fetchApi";
 import { CreateCarinfo } from "../scripts/interfaces";
+import Engine from "./Engine";
 import Main from "./Main";
 
 const Form = {
@@ -51,8 +52,10 @@ const Form = {
         raceBtn.addEventListener('click', () => {
             const startEngine = document.querySelectorAll('.start-engine');
             const stopEngine = document.querySelectorAll('.stop-engine');
-            const selectBtns = document.querySelectorAll('.car-span');
-            selectBtns.forEach((x, i) => {
+            const selectBtns = document.querySelectorAll('.car-span') as NodeListOf<HTMLElement>;
+            selectBtns.forEach(async (x, i) => {
+                const id: number = Number(selectBtns[i].parentElement?.parentElement?.parentElement?.dataset.id)
+                await Engine.startEngine(id, x, 'started')
                 x.classList.add('active-car')
                 startEngine[i].classList.remove('start-active')
                 stopEngine[i].classList.add('stop-active')
@@ -62,8 +65,10 @@ const Form = {
         resetBtn.addEventListener('click', () => {
             const startEngine = document.querySelectorAll('.start-engine');
             const stopEngine = document.querySelectorAll('.stop-engine');
-            const selectBtns = document.querySelectorAll('.car-span');
-            selectBtns.forEach((x, i) => {
+            const selectBtns = document.querySelectorAll('.car-span') as NodeListOf<HTMLElement>;
+            selectBtns.forEach(async (x, i) => {
+                const id: number = Number(selectBtns[i].parentElement?.parentElement?.parentElement?.dataset.id)
+                await Engine.startEngine(id, x, 'stopped')
                 x.classList.remove('active-car')
                 startEngine[i].classList.add('start-active')
                 stopEngine[i].classList.remove('stop-active')

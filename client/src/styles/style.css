@@ -56,7 +56,6 @@ button {
 .road .car-span {
   position: absolute;
   transform: translateX(100px);
-  transition: 3s;
 }
 .road .active-car {
   transform: translateX(1100px);

@@ -1,7 +1,7 @@
 import { getGarage, baseUrl, path, UpdateCar, DeleteCar } from "../scripts/fetchApi";
 import { carinfo, paginationTypeObj } from "../scripts/interfaces";
 import { mainRender } from "../index";
-import Engine from "./engine";
+import Engine from "./Engine";
 
 const Main = {
     createCars(data: carinfo) {
@@ -190,12 +190,14 @@ const Main = {
         })
     },
     engine(data: carinfo, id: number, startEngine: HTMLElement, stopEngine: HTMLElement, carSpan: HTMLElement) {
-        startEngine.addEventListener('click', () => {
+        startEngine.addEventListener('click', async () => {
+            await Engine.startEngine(id, carSpan, 'started')
             startEngine.classList.remove('start-active')
             stopEngine.classList.add('stop-active')
             carSpan.classList.add('active-car')
         })
-        stopEngine.addEventListener('click', () => {
+        stopEngine.addEventListener('click', async () => {
+            await Engine.startEngine(id, carSpan, 'stopped')
             stopEngine.classList.remove('stop-active')
             startEngine.classList.add('start-active')
             carSpan.classList.remove('active-car')
@@ -203,8 +205,5 @@ const Main = {
     },
 
 }
-setTimeout(() => {
-    Engine.startEngine()
-}, 1000);
 
 export default Main;
