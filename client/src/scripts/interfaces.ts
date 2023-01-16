@@ -11,3 +11,7 @@ export interface paginationTypeObj {
     key: string,
     number: number,
 }
+export interface engineQueryParams {
+    id: number,
+    status: string,
+}

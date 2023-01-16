@@ -1,4 +1,4 @@
-import { paginationTypeObj, CreateCarinfo, carinfo } from './interfaces'
+import { paginationTypeObj, CreateCarinfo, carinfo, engineQueryParams } from './interfaces'
 
 
 export const baseUrl = 'http://localhost:3000';
@@ -18,6 +18,12 @@ export const getGarage = async (baseUrl: string, path: string, queryParams?: pag
     // console.log(queryParams[0].number);
     return data;
 };
+export const engineStart = async (baseUrl: string, path: string, idx: number, query: string ): Promise<carinfo[]> => {
+    const response = await fetch(`${baseUrl}${path}?id=${1}&status=${'started'}`);
+    const data: carinfo[] = await response.json();
+    return data;
+};
+// http://localhost:3000/engine?id=1&status=started
 
 export const CreateCars = async (body: object) => {
     const response = await fetch(`${baseUrl}${path.garage}`, {

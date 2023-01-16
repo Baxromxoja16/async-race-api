@@ -48,6 +48,28 @@ const Form = {
         resetBtn.innerText = 'Reset';
         generateBtn.innerText = 'genetare cars';
 
+        raceBtn.addEventListener('click', () => {
+            const startEngine = document.querySelectorAll('.start-engine');
+            const stopEngine = document.querySelectorAll('.stop-engine');
+            const selectBtns = document.querySelectorAll('.car-span');
+            selectBtns.forEach((x, i) => {
+                x.classList.add('active-car')
+                startEngine[i].classList.remove('start-active')
+                stopEngine[i].classList.add('stop-active')
+            })
+        })
+
+        resetBtn.addEventListener('click', () => {
+            const startEngine = document.querySelectorAll('.start-engine');
+            const stopEngine = document.querySelectorAll('.stop-engine');
+            const selectBtns = document.querySelectorAll('.car-span');
+            selectBtns.forEach((x, i) => {
+                x.classList.remove('active-car')
+                startEngine[i].classList.add('start-active')
+                stopEngine[i].classList.remove('stop-active')
+            })
+        })
+
         create.appendChild(CrTexts);
         create.appendChild(CrColor);
         create.appendChild(Crbutton);

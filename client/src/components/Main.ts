@@ -1,6 +1,7 @@
 import { getGarage, baseUrl, path, UpdateCar, DeleteCar } from "../scripts/fetchApi";
 import { carinfo, paginationTypeObj } from "../scripts/interfaces";
 import { mainRender } from "../index";
+import Engine from "./engine";
 
 const Main = {
     createCars(data: carinfo) {
@@ -64,7 +65,7 @@ const Main = {
             </g>
         </svg>
         `
-        // this.engine(data, data.id, startEngine, stopEngine, carSpan)
+        this.engine(data, data.id, startEngine, stopEngine, carSpan)
         road.appendChild(startEngine)
         road.appendChild(stopEngine)
         road.appendChild(carSpan);
@@ -142,6 +143,7 @@ const Main = {
         title.innerText = `Garage (${data.length})`;
         pageNum.innerText = `Page #${b + 1}`;
 
+
         main.appendChild(title);
         main.appendChild(pageNum);
 
@@ -192,20 +194,14 @@ const Main = {
             startEngine.classList.remove('start-active')
             stopEngine.classList.add('stop-active')
             carSpan.classList.add('active-car')
-            this.engineFetch(id, 'started', carSpan)
         })
         stopEngine.addEventListener('click', () => {
             stopEngine.classList.remove('stop-active')
             startEngine.classList.add('start-active')
             carSpan.classList.remove('active-car')
-            this.engineFetch(id, 'stopped', carSpan)
         })
-    },
-    async engineFetch(id: number, query: string, carSpan: HTMLElement) {
-        const response = await fetch(`http://localhost:3000/engine?id=${id}&status=${query}`, { method: 'PATCH' })
-        const data = await response.json()
-        console.log(data);
     },
 
 }
-export default Main
+
+export default Main;
