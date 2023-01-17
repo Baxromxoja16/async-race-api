@@ -32,6 +32,17 @@ export const engineStart = async (
   const data = await response.json();
   return data;
 };
+export const engineDrive = async (
+  baseUrl: string,
+  path: string,
+  idx: number,
+  query: string
+) => {
+  const response = await fetch(`${baseUrl}${path}?id=${idx}&status=${query}`, {
+    method: "PATCH",
+  });
+  return response.status;
+};
 export const CreateCars = async (body: object) => {
   const response = await fetch(`${baseUrl}${path.garage}`, {
     method: "POST",

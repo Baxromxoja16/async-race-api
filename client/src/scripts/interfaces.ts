@@ -15,3 +15,10 @@ export interface engineQueryParams {
   id: number;
   status: string;
 }
+export interface properties {
+  id: number;
+  color: string;
+  name: string;
+  time?: number;
+  wins?: number;
+}

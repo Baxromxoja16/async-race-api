@@ -1,8 +1,8 @@
 import { baseUrl, getGarage, path } from "../scripts/fetchApi";
-import { carinfo } from "../scripts/interfaces";
+import { carinfo, properties } from "../scripts/interfaces";
 
 const WinnerComponents = {
-  winnerMain(data: Array<carinfo>) {
+  async winnerMain(data: Array<carinfo>) {
     const main: HTMLElement = document.createElement("div");
     const title: HTMLElement = document.createElement("h1");
     const pageNum: HTMLElement = document.createElement("p");
@@ -38,10 +38,9 @@ const WinnerComponents = {
       th.innerText = infoArr[i];
       tr.appendChild(th);
     }
-    console.log(data.forEach((x, i) => this.createWinnerList(x, i)));
 
     table.appendChild(tr);
-    // table.appendChild()
+    table.appendChild(await this.createWinnerList(data));
     main.appendChild(title);
     main.appendChild(pageNum);
 
@@ -52,20 +51,22 @@ const WinnerComponents = {
 
     return main;
   },
-  async createWinnerList(data: carinfo, i: number) {
+  async createWinnerList(data: carinfo[]) {
     const tr: HTMLElement = document.createElement("tr");
 
     const cars = await getGarage(baseUrl, path.garage);
+    const found = cars.filter((val) => val.id === data[0].id);
 
-    const found = cars.filter((val) => val.id === data.id);
-
-    const propertyy = { ...data, ...found[0] };
-    for (const key in propertyy) {
-      console.log(key);
+    const properties: properties = Object.assign(found[0], data[0]);
+    console.log(properties);
+    for (const key in properties) {
       const td: HTMLElement = document.createElement("td");
-      if (key === "color") {
+      if (key === "name") {
+        td.innerText = properties[key];
+        tr.appendChild(td);
+      } else if (key === "color") {
         td.innerHTML = `
-                        <svg width="64px" height="64px" viewBox="0 0 400 400" style='stroke: ${propertyy[key]} ' fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <svg width="64px" height="64px" viewBox="0 0 400 400" style='stroke: ${properties[key]} ' fill="none" xmlns="http://www.w3.org/2000/svg">
                         <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
                         <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
                         <g id="SVGRepo_iconCarrier">
@@ -81,17 +82,14 @@ const WinnerComponents = {
                         </svg>
                     `;
         tr.appendChild(td);
-      } else if (key === "name") {
-        td.innerText = propertyy[key];
+      } else if (key === "wins") {
+        td.innerText = `${properties[key]}`;
+        tr.appendChild(td);
+      } else if (key === "time") {
+        td.innerText = `${properties[key]}`;
         tr.appendChild(td);
       }
-      // else if(key === 'wins'){
-      //     td.innerText = `${propertyy[key]}`
-      //     tr.appendChild(td)
-      // }
-      // else if(key === 'color'){}
     }
-    console.log(tr);
     return tr;
   },
 };
