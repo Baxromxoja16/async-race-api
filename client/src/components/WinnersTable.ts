@@ -27,8 +27,8 @@ const WinnerComponents = {
     btnPrev.innerText = "Prev";
     const infoArr: string[] = [
       "Number",
-      "Car",
       "Name",
+      "Car",
       "Wins",
       "Best Time (seconds)",
     ];
@@ -58,13 +58,16 @@ const WinnerComponents = {
     const found = cars.filter((val) => val.id === data[0].id);
 
     const properties: properties = Object.assign(found[0], data[0]);
-    console.log(properties);
+
+    let num = 0;
+    const td: HTMLElement = document.createElement("td");
+    num++;
+    td.innerText = `${num}`;
+    tr.appendChild(td);
+
     for (const key in properties) {
       const td: HTMLElement = document.createElement("td");
-      if (key === "name") {
-        td.innerText = properties[key];
-        tr.appendChild(td);
-      } else if (key === "color") {
+      if (key === "color") {
         td.innerHTML = `
                         <svg width="64px" height="64px" viewBox="0 0 400 400" style='stroke: ${properties[key]} ' fill="none" xmlns="http://www.w3.org/2000/svg">
                         <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
@@ -79,8 +82,10 @@ const WinnerComponents = {
                             <path d="M258.873 239.059C190.155 241.806 116.847 229.997 48.4229 235.624" stroke-opacity="0.9" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"></path>
                             <path d="M352.003 219.244C351.792 226.929 352.003 234.736 352.003 242.178" stroke-opacity="0.9" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"></path>
                         </g>
-                        </svg>
-                    `;
+                        </svg>`;
+        tr.appendChild(td);
+      } else if (key === "name") {
+        td.innerText = properties[key];
         tr.appendChild(td);
       } else if (key === "wins") {
         td.innerText = `${properties[key]}`;

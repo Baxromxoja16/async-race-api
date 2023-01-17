@@ -64,7 +64,7 @@ const Form = {
         engine.addEventListener("animationend", () => {
           if (counter === 1) {
             counter++;
-            console.log(engine);
+            console.log(id);
           }
         });
         x.classList.add("active-car");
