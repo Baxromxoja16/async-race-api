@@ -58,10 +58,33 @@ button {
   left: 100px;
 }
 .road .active-car {
-  left: 95%;
+  -webkit-animation-name: slidein;
+          animation-name: slidein;
+  -webkit-animation-fill-mode: forwards;
+          animation-fill-mode: forwards;
+  -webkit-animation-timing-function: linear;
+          animation-timing-function: linear;
 }
-.road .start-engine,
-.road .stop-engine {
+
+@-webkit-keyframes slidein {
+  from {
+    left: 100px;
+  }
+  to {
+    left: 95%;
+  }
+}
+
+@keyframes slidein {
+  from {
+    left: 100px;
+  }
+  to {
+    left: 95%;
+  }
+}
+.start-engine,
+.stop-engine {
   background: transparent;
   border: 1px solid #aaa;
   border-radius: 5px;
@@ -70,18 +93,22 @@ button {
   cursor: pointer;
   font-size: 18px;
 }
-.road .start-engine {
+
+.start-engine {
   left: 0;
 }
-.road .stop-engine {
+
+.stop-engine {
   left: 50px;
 }
-.road .start-active {
+
+.start-active {
   border-color: #00ff00;
   background: rgba(15, 230, 15, 0.5);
   color: #00ff00;
 }
-.road .stop-active {
+
+.stop-active {
   border-color: #850000;
   background: rgba(230, 15, 15, 0.5);
   color: #ff9c9c;

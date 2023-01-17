@@ -55,12 +55,18 @@ const Form = {
       const selectBtns = document.querySelectorAll(
         ".car-span"
       ) as NodeListOf<HTMLElement>;
-
+      let counter = 1;
       selectBtns.forEach(async (x, i) => {
         const id = Number(
           selectBtns[i].parentElement?.parentElement?.parentElement?.dataset.id
         );
-        await Engine.startEngine(id, x, "started");
+        const engine = await Engine.startEngine(id, x, "started");
+        engine.addEventListener("animationend", () => {
+          if (counter === 1) {
+            counter++;
+            console.log(engine);
+          }
+        });
         x.classList.add("active-car");
         startEngine[i].classList.remove("start-active");
         stopEngine[i].classList.add("stop-active");
