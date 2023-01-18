@@ -1,7 +1,9 @@
 import { mainRender } from "..";
 import { CreateCars } from "../scripts/fetchApi";
+import { winnerType } from "../scripts/interfaces";
 import Engine from "./Engine";
 import Main from "./Main";
+import WinnerComponents from "./WinnersTable";
 
 const Form = {
   createFormComponent() {
@@ -61,10 +63,13 @@ const Form = {
           selectBtns[i].parentElement?.parentElement?.parentElement?.dataset.id
         );
         const engine = await Engine.startEngine(id, x, "started");
-        engine.addEventListener("animationend", () => {
+        engine.addEventListener("animationend", async () => {
           if (counter === 1) {
             counter++;
-            console.log(id);
+            const regex = engine.style.animationDuration.replace(/[s]/g, "");
+            const time = Number(regex);
+            const data: winnerType = { id: id, wins: 1, time: time };
+            await WinnerComponents.addWinners(data);
           }
         });
         x.classList.add("active-car");
@@ -120,7 +125,7 @@ const Form = {
         name: crTexts.value,
         color: crColor.value,
       };
-      const data = await CreateCars(body);
+      await CreateCars(body);
       mainRender();
     });
   },
@@ -220,7 +225,7 @@ const Form = {
         if (i < 100) {
           const cars = await CreateCars(x);
           Main.CreateMain(cars);
-        } // 9860 6004 3899 4128
+        }
       });
       mainRender();
     });

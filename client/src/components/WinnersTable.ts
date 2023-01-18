@@ -1,8 +1,25 @@
-import { baseUrl, getGarage, path } from "../scripts/fetchApi";
-import { carinfo, properties } from "../scripts/interfaces";
+import { WinnersRender } from "..";
+import {
+  baseUrl,
+  CreateWinners,
+  getGarage,
+  getWinners,
+  path,
+  UpdateWinner,
+} from "../scripts/fetchApi";
+import { properties, winnerType } from "../scripts/interfaces";
+
+let pageNum = localStorage.getItem("pageWinner")
+  ? Number(localStorage.getItem("pageWinner"))
+  : 1;
+
+localStorage.setItem("pageWinner", `${pageNum}`);
+
+localStorage.setItem("bool", "true");
 
 const WinnerComponents = {
-  async winnerMain(data: Array<carinfo>) {
+  async winnerMain(data: Array<winnerType>) {
+    const dataLength = await getWinners(baseUrl, path.winners);
     const main: HTMLElement = document.createElement("div");
     const title: HTMLElement = document.createElement("h1");
     const pageNum: HTMLElement = document.createElement("p");
@@ -20,8 +37,10 @@ const WinnerComponents = {
     title.classList.add("title");
     pageNum.classList.add("page-num");
     table.classList.add("winners-info");
+    btnNext.classList.add("btnNext");
+    btnPrev.classList.add("btnPrev");
 
-    title.innerText = `Winners (${data.length})`;
+    title.innerText = `Winners (${dataLength.length})`;
     pageNum.innerText = `Page #${b + 1}`;
     btnNext.innerText = "Next";
     btnPrev.innerText = "Prev";
@@ -35,12 +54,16 @@ const WinnerComponents = {
 
     for (let i = 0; i < infoArr.length; i++) {
       const th: HTMLElement = document.createElement("th");
+      th.className = infoArr[i];
       th.innerText = infoArr[i];
       tr.appendChild(th);
     }
 
     table.appendChild(tr);
-    table.appendChild(await this.createWinnerList(data));
+    for (let i = 0; i < data.length; i++) {
+      table.appendChild(await this.createWinnerList(data, i));
+    }
+
     main.appendChild(title);
     main.appendChild(pageNum);
 
@@ -49,15 +72,17 @@ const WinnerComponents = {
     main.appendChild(mainParent);
     main.appendChild(table);
 
+    this.sortWinners(main);
+    this.paginationWinners(main, data);
     return main;
   },
-  async createWinnerList(data: carinfo[]) {
+  async createWinnerList(data: winnerType[], i: number) {
     const tr: HTMLElement = document.createElement("tr");
 
     const cars = await getGarage(baseUrl, path.garage);
-    const found = cars.filter((val) => val.id === data[0].id);
+    const found = cars.filter((val) => val.id === data[i].id);
 
-    const properties: properties = Object.assign(found[0], data[0]);
+    const properties: properties = Object.assign(found[0], data[i]);
 
     let num = 0;
     const td: HTMLElement = document.createElement("td");
@@ -96,6 +121,73 @@ const WinnerComponents = {
       }
     }
     return tr;
+  },
+  async addWinners(data: winnerType) {
+    const isDuplicate = await getWinners(baseUrl, path.winners);
+
+    isDuplicate.forEach(async (x) => {
+      console.log(x.time);
+      if (x.id === data.id) {
+        const body: winnerType = {
+          id: data.id,
+          wins: ++x.wins,
+          time: x.time > data.time ? data.time : x.time,
+        };
+
+        await UpdateWinner(data.id, body);
+      } else {
+        await CreateWinners(data);
+      }
+    });
+  },
+  sortWinners(main: HTMLElement) {
+    const wins = <HTMLElement>main.querySelector(".Wins");
+    const time = main.querySelector(".Time");
+    const counter = localStorage.getItem("bool");
+    wins?.addEventListener("click", () => {
+      if (counter === "true") {
+        this.sortRender("wins", "DESC", "false");
+      } else {
+        this.sortRender("wins", "ASC", "true");
+      }
+    });
+    time?.addEventListener("click", () => {
+      if (counter === "true") {
+        this.sortRender("time", "DESC", "false");
+      } else {
+        this.sortRender("time", "ASC", "true");
+      }
+    });
+  },
+  sortRender(key: string, num: string, bool: string) {
+    WinnersRender([
+      { key: "_page", number: 1 },
+      { key: "_limit", number: 7 },
+      { key: "_sort", number: key },
+      { key: "_order", number: num },
+    ]);
+    localStorage.setItem("bool", bool);
+  },
+  paginationWinners(main: HTMLElement, data: Array<winnerType>) {
+    const nextBtn = main.querySelector(".btnNext");
+    const prevBtn = main.querySelector(".btnPrev");
+    console.log(prevBtn);
+
+    nextBtn?.addEventListener("click", () => {
+      data.length / 7 < pageNum ? pageNum : pageNum++;
+      this.paginationRender(pageNum);
+    });
+    prevBtn?.addEventListener("click", () => {
+      pageNum > 0 ? pageNum-- : pageNum;
+      this.paginationRender(pageNum);
+    });
+  },
+  paginationRender(pageNum: number) {
+    WinnersRender([
+      { key: "_page", number: pageNum },
+      { key: "_limit", number: 7 },
+    ]);
+    localStorage.setItem("pageWinner", `${pageNum}`);
   },
 };
 export default WinnerComponents;

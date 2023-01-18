@@ -1,4 +1,5 @@
 import { mainRender, WinnersRender } from "..";
+
 function Pages() {
   const pages = document.createElement("div");
   const toGarage = document.createElement("button");
@@ -8,13 +9,15 @@ function Pages() {
   toWinners.className = "btn to-winners";
   toGarage.innerText = "To garage";
   toWinners.innerText = "To winners";
+
   pages.appendChild(toGarage);
   pages.appendChild(toWinners);
+
   toGarage.addEventListener("click", () => {
     mainRender();
   });
   toWinners.addEventListener("click", () => {
-    WinnersRender();
+    WinnersRender([{ key: "_limit", number: 7 }]);
   });
   return pages;
 }

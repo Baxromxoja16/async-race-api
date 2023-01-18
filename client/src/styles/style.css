@@ -135,4 +135,14 @@ button {
 
 .active {
   background: green;
+}
+
+table {
+  border-collapse: collapse;
+}
+table th,
+table td {
+  padding: 8px 15px;
+  text-align: center;
+  border: 1px solid;
 }/*# sourceMappingURL=style.css.map */

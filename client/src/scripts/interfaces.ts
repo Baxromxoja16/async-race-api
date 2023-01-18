@@ -9,7 +9,7 @@ export interface CreateCarinfo {
 }
 export interface paginationTypeObj {
   key: string;
-  number: number;
+  number: number | string;
 }
 export interface engineQueryParams {
   id: number;
@@ -21,4 +21,9 @@ export interface properties {
   name: string;
   time?: number;
   wins?: number;
+}
+export interface winnerType {
+  id: number;
+  time: number;
+  wins: number;
 }
