@@ -28,9 +28,9 @@ const WinnerComponents = {
     const mainParent: HTMLElement = document.createElement("div");
     const table: HTMLElement = document.createElement("table");
     const tr: HTMLElement = document.createElement("tr");
-    const b: number = Number(localStorage.getItem("pageNumWin"))
-      ? Number(localStorage.getItem("pageNumWin"))
-      : 0;
+    const b: number = Number(localStorage.getItem("pageWinner"))
+      ? Number(localStorage.getItem("pageWinner"))
+      : 1;
 
     main.classList.add("main");
     mainParent.classList.add("parent-main");
@@ -41,7 +41,7 @@ const WinnerComponents = {
     btnPrev.classList.add("btnPrev");
 
     title.innerText = `Winners (${dataLength.length})`;
-    pageNum.innerText = `Page #${b + 1}`;
+    pageNum.innerText = `Page #${b}`;
     btnNext.innerText = "Next";
     btnPrev.innerText = "Prev";
     const infoArr: string[] = [
@@ -60,8 +60,10 @@ const WinnerComponents = {
     }
 
     table.appendChild(tr);
+    let num = 0;
     for (let i = 0; i < data.length; i++) {
-      table.appendChild(await this.createWinnerList(data, i));
+      num++;
+      table.appendChild(await this.createWinnerList(data, i, num));
     }
 
     main.appendChild(title);
@@ -76,7 +78,7 @@ const WinnerComponents = {
     this.paginationWinners(main, data);
     return main;
   },
-  async createWinnerList(data: winnerType[], i: number) {
+  async createWinnerList(data: winnerType[], i: number, num: number) {
     const tr: HTMLElement = document.createElement("tr");
 
     const cars = await getGarage(baseUrl, path.garage);
@@ -84,9 +86,7 @@ const WinnerComponents = {
 
     const properties: properties = Object.assign(found[0], data[i]);
 
-    let num = 0;
     const td: HTMLElement = document.createElement("td");
-    num++;
     td.innerText = `${num}`;
     tr.appendChild(td);
 
@@ -126,7 +126,6 @@ const WinnerComponents = {
     const isDuplicate = await getWinners(baseUrl, path.winners);
 
     isDuplicate.forEach(async (x) => {
-      console.log(x.time);
       if (x.id === data.id) {
         const body: winnerType = {
           id: data.id,
@@ -161,7 +160,7 @@ const WinnerComponents = {
   },
   sortRender(key: string, num: string, bool: string) {
     WinnersRender([
-      { key: "_page", number: 1 },
+      { key: "_page", number: Number(localStorage.getItem("pageWinner")) },
       { key: "_limit", number: 7 },
       { key: "_sort", number: key },
       { key: "_order", number: num },
@@ -171,14 +170,13 @@ const WinnerComponents = {
   paginationWinners(main: HTMLElement, data: Array<winnerType>) {
     const nextBtn = main.querySelector(".btnNext");
     const prevBtn = main.querySelector(".btnPrev");
-    console.log(prevBtn);
 
     nextBtn?.addEventListener("click", () => {
       data.length / 7 < pageNum ? pageNum : pageNum++;
       this.paginationRender(pageNum);
     });
     prevBtn?.addEventListener("click", () => {
-      pageNum > 0 ? pageNum-- : pageNum;
+      pageNum > 1 ? pageNum-- : pageNum;
       this.paginationRender(pageNum);
     });
   },

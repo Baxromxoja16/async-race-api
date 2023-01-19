@@ -119,6 +119,8 @@ const Main = {
     }
 
     const asd = (b: number) => {
+      b > dataSort.length ? (b = 0) : b;
+      localStorage.setItem("pageNum", `${b}`);
       for (let j = 0; j < dataSort[b].length; j++) {
         if (dataSort[b].length > j) {
           mainParent.appendChild(this.createCars(dataSort[b][j]));

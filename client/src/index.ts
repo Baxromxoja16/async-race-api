@@ -4,6 +4,8 @@ import { getGarage, baseUrl, path, getWinners } from "./scripts/fetchApi";
 import createGaragePage from "./scripts/garage";
 import winners from "./scripts/winners";
 
+// localStorage.setItem("pages", "garage");
+
 export async function mainRender() {
   const data: Array<carinfo> = await getGarage(baseUrl, path.garage);
   createGaragePage(data);
@@ -16,5 +18,14 @@ export async function WinnersRender(_queryParams?: paginationTypeObj[]) {
   );
   winners(data);
 }
+const getPages = localStorage.getItem("pages");
 
-mainRender();
+if (getPages === "garage" || getPages === null) {
+  mainRender();
+} else if (getPages === "winners") {
+  const pageNum = Number(localStorage.getItem("pageWinner"));
+  WinnersRender([
+    { key: "_page", number: pageNum },
+    { key: "_limit", number: 7 },
+  ]);
+}

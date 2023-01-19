@@ -65,9 +65,21 @@ export const DeleteCar = async (id: number) => {
   const response = await fetch(`${baseUrl}${path.garage}/${id}`, {
     method: "DELETE",
   });
+
+  isWinners(id);
+
   const car = await response.json();
   return car;
 };
+
+async function isWinners(id: number) {
+  const winners = await getWinners(baseUrl, path.winners);
+  const isId = winners.filter((x) => x.id === id);
+  await fetch(`${baseUrl}${path.winners}/${isId[0].id}`, {
+    method: "DELETE",
+  });
+}
+
 export const engineDrive = async (
   baseUrl: string,
   path: string,

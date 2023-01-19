@@ -15,9 +15,15 @@ function Pages() {
 
   toGarage.addEventListener("click", () => {
     mainRender();
+    localStorage.setItem("pages", "garage");
   });
   toWinners.addEventListener("click", () => {
-    WinnersRender([{ key: "_limit", number: 7 }]);
+    const pageNum = Number(localStorage.getItem("pageWinner"));
+    WinnersRender([
+      { key: "_page", number: pageNum },
+      { key: "_limit", number: 7 },
+    ]);
+    localStorage.setItem("pages", "winners");
   });
   return pages;
 }
