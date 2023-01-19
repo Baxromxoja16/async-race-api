@@ -124,7 +124,7 @@ const WinnerComponents = {
   },
   async addWinners(data: winnerType) {
     const isDuplicate = await getWinners(baseUrl, path.winners);
-
+    this.congratulation(data);
     isDuplicate.forEach(async (x) => {
       if (x.id === data.id) {
         const body: winnerType = {
@@ -186,6 +186,14 @@ const WinnerComponents = {
       { key: "_limit", number: 7 },
     ]);
     localStorage.setItem("pageWinner", `${pageNum}`);
+  },
+  async congratulation(winner: winnerType) {
+    const getCar = await getGarage(baseUrl, path.garage);
+    const winnerInfo = getCar.filter((x) => x.id === winner.id);
+
+    setTimeout(() => {
+      alert(`${winnerInfo[0].name} was the first by ${winner.time} seconds`);
+    }, 1000);
   },
 };
 export default WinnerComponents;
