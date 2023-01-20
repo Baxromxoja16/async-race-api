@@ -1,0 +1,160 @@
+body {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background: #222;
+  color: #fede00;
+}
+
+.btn {
+  border: none;
+  background: greenyellow;
+  padding: 5px;
+  border-radius: 5px;
+  transition: 0.3s;
+  cursor: pointer;
+  text-transform: uppercase;
+}
+.btn:hover {
+  transform: scale(1.1);
+}
+
+button {
+  padding: 10px 15px;
+}
+
+.container {
+  max-width: 80%;
+  margin: auto;
+  margin-top: 30px;
+}
+
+.pages {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 30px;
+}
+
+.game {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.road {
+  width: 100%;
+  border-bottom: 3px dashed white;
+  margin-bottom: 10px;
+  padding-bottom: 60px;
+  position: relative;
+}
+.road .flag {
+  position: absolute;
+  right: 50px;
+}
+.road .flag svg {
+  stroke: #fede00;
+}
+.road .car-span {
+  position: absolute;
+  left: 100px;
+}
+.road .active-car {
+  -webkit-animation-name: slidein;
+          animation-name: slidein;
+  -webkit-animation-fill-mode: forwards;
+          animation-fill-mode: forwards;
+  -webkit-animation-timing-function: linear;
+          animation-timing-function: linear;
+}
+
+@-webkit-keyframes slidein {
+  from {
+    left: 100px;
+  }
+  to {
+    left: 95%;
+  }
+}
+
+@keyframes slidein {
+  from {
+    left: 100px;
+  }
+  to {
+    left: 95%;
+  }
+}
+.start-engine,
+.stop-engine {
+  background: transparent;
+  border: 1px solid #aaa;
+  border-radius: 5px;
+  position: absolute;
+  color: white;
+  cursor: pointer;
+  font-size: 18px;
+}
+
+.start-engine {
+  left: 0;
+}
+
+.stop-engine {
+  left: 50px;
+}
+
+.start-active {
+  border-color: #00ff00;
+  background: rgba(15, 230, 15, 0.5);
+  color: #00ff00;
+}
+
+.stop-active {
+  border-color: #850000;
+  background: rgba(230, 15, 15, 0.5);
+  color: #ff9c9c;
+}
+
+.form .create,
+.form .update {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+.form .create .btn-create,
+.form .create .btn-update,
+.form .update .btn-create,
+.form .update .btn-update {
+  text-transform: uppercase;
+}
+
+.main-cars .btns-setting {
+  display: flex;
+  gap: 10px;
+}
+
+.active {
+  background: green;
+}
+
+table {
+  border-collapse: collapse;
+}
+table th,
+table td {
+  padding: 8px 15px;
+  text-align: center;
+  border: 1px solid;
+}
+
+@media (max-width: 700px) {
+  .road .flag {
+    right: -45px;
+  }
+  .road .car-span {
+    left: 80px;
+  }
+  button {
+    padding: 5px 10px;
+  }
+}/*# sourceMappingURL=style.css.map */

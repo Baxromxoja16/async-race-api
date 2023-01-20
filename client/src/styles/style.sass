@@ -1,0 +1,108 @@
+@import './_mixins'
+
+body
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif
+    background: #222
+    color: #fede00
+
+.btn
+    @include btn()
+button
+    padding: 10px 15px
+.container
+    max-width: 80%
+    margin: auto
+    margin-top: 30px
+
+.pages
+    display: flex
+    gap: 10px
+    margin-bottom: 30px
+.game
+    display: flex
+    gap: 10px
+    margin-top: 20px
+.road
+    width: 100%
+    border-bottom: 3px dashed white
+    margin-bottom: 10px
+    padding-bottom: 60px
+    position: relative
+
+    .flag
+        position: absolute
+        right: 50px
+        svg
+            stroke: #fede00
+    .car-span
+        position: absolute
+        left: 100px
+    .active-car
+        animation-name: slidein
+        // animation: alternate
+        animation-fill-mode: forwards
+        animation-timing-function: linear
+@keyframes slidein
+    from
+        left: 100px
+    to
+        left: 95%
+                
+
+
+.start-engine,
+.stop-engine
+    background: transparent
+    border: 1px solid #aaa
+    border-radius: 5px
+    position: absolute
+    color: white
+    cursor: pointer
+    font-size: 18px
+.start-engine
+    left: 0
+.stop-engine
+    left: 50px
+.start-active
+    border-color: #00ff00
+    background: rgba(15, 230, 15, 0.5)
+    color: #00ff00
+.stop-active
+    border-color: #850000
+    background: rgba(230, 15, 15, 0.5)
+    color: #ff9c9c
+
+.form
+    .create,
+    .update
+        display: flex
+        align-items: center
+        gap: 10px
+        margin-bottom: 10px
+        .btn-create,
+        .btn-update
+            text-transform: uppercase
+
+.main-cars
+    .btns-setting
+        display: flex
+        gap: 10px
+.active
+    background: green
+
+table
+    border-collapse: collapse
+    th,
+    td
+        padding: 8px 15px
+        text-align: center
+        border: 1px solid
+
+@media (max-width: 700px)
+    .road
+        .flag
+            right: -45px
+        .car-span
+            left: 80px
+    button
+        padding: 5px 10px
